@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "nyc --reporter=html --reporter=text mocha --exit"
+    "test": "mocha --recursive --exit"
   },
   "author": "riaan@entersekt.com",
   "description": "Basic to do list exercise",
