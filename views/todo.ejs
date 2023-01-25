@@ -3,7 +3,7 @@
 <html>
 
     <head>
-        <title>Hello Hello</title>
+        <title>Login form</title>
         <style>
             a {
                 text-decoration: none;
@@ -14,7 +14,7 @@
     </head>
 
     <body>
-        <h1>TrainWithShubham</h1>
+        <h1>Login Form</h1>
         <ul>
             <% todolist.forEach(function(todo, index) { %>
             <li>
@@ -27,8 +27,8 @@
 
         <form action="/todo/add/" method="post">
             <p>
-                <label for="newtodo">What shoud I do?</label>
-                <input type="text" name="newtodo" id="newtodo" autofocus />
+                <label for="username">UserName</label>
+                <input type="text" name="newtodo" id="username" autofocus />
                 <input type="submit" value="Add" />
             </p>
         </form>
