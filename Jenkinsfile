@@ -1,29 +1,24 @@
 pipeline {
-    agent { label 'node-agent' }
-    
-    stages{
-        stage('Code'){
-            steps{
-                git url: 'https://github.com/LondheShubham153/node-todo-cicd.git', branch: 'master' 
-            }
+	agent any
+    stages
+	{	
+	stage('clone the repo')
+		{
+			steps{	
+	 sh 'git clone https://gitlab.com/sagore-group1/apache-app/nodejs-app-pipeline.git'
+			}
+		}
+        stage('build nodejs image')
+        {
+        steps{ 
+            sh 'docker build -t nodejs-app-image .'
         }
-        stage('Build and Test'){
-            steps{
-                sh 'docker build . -t trainwithshubham/node-todo-test:latest'
-            }
         }
-        stage('Push'){
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                 sh 'docker push trainwithshubham/node-todo-test:latest'
-                }
-            }
+        stage('run nodejs image')
+        {
+        steps{
+            sh 'docker run -dt -p 8000:8000 nodejs-app-image'
         }
-        stage('Deploy'){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-            }
         }
-    }
+     }
 }
