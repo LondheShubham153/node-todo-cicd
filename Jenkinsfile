@@ -11,7 +11,7 @@ pipeline{
             }
         }
         
-        stage("Build"){
+        stage("Build_and_Test"){
             steps{
                 // echo "Building the code"
                 sh "docker build . -t shivendra1702/node-todo-app:latest"
@@ -26,12 +26,6 @@ pipeline{
                     sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
                     sh "docker push shivendra1702/node-todo-app:latest"
                 }
-            }
-        }
-        
-        stage("Test"){
-            steps{
-                echo "Testing the code "
             }
         }
         
