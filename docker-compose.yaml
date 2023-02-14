@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  web:
+    image: billahmustasin/node-todo-test:latest
+    ports:
+      - "8001:8001"
