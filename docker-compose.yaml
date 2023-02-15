@@ -4,4 +4,4 @@ services:
   web:
     image: billahmustasin/node-todo-test:latest
     ports:
-      - "8001:8001"
+      - "8000:8000"
