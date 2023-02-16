@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todonode-deployment
+  labels:
+    app: todonode
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todonode
+  template:
+    metadata:
+      labels:
+        app: todonode
+    spec:
+      containers:
+      - name: todonode
+        image: yogendrakokamkar/todonode:latest
+        ports:
+        - containerPort: 8000
