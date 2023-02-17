@@ -7,7 +7,7 @@ pipeline {
                 git url: 'https://github.com/billahmustasin/node-todo-cicd.git', branch: 'master' 
             }
         }
-        stage('Build'){
+        stage('Build and Test'){
             steps{
                 sh 'docker build . -t billahmustasin/node-todo-test:latest'
             }
@@ -18,11 +18,6 @@ pipeline {
         	 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
                  sh 'docker push billahmustasin/node-todo-test:latest'
                 }
-            }
-        }
-        stage('Test'){
-            steps{
-                echo "hey"
             }
         }
         stage('Deploy'){
