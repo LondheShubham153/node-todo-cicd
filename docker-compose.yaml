@@ -2,6 +2,6 @@ version: '3.9'
 
 services:
   web:
-    build: premsagarpc1/node-todo-test:latest
+    build: 'premsagarpc1/node-todo-test:latest'
     ports:
       - "8000:8000"
