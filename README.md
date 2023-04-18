@@ -18,3 +18,5 @@ or Run by docker compose
 test
 build
 
+deploy
+
