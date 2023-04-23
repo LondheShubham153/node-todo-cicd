@@ -1,23 +1,28 @@
 pipeline {
-    agent { label 'node-agent' }
+    agent any
     
     stages{
         stage('Code'){
             steps{
-                git url: 'https://github.com/billahmustasin/node-todo-cicd.git', branch: 'master' 
+                git url: 'https://github.com/billahmustasin/node-todo-cicd.git', branch: 'master'
             }
         }
-        stage('Build and Test'){
+        stage('Build'){
             steps{
-                sh 'docker build . -t billahmustasin/node-todo-test:latest'
+                sh 'docker build . -t billahmustasin/node-todo-jen:latest'
             }
         }
         stage('Push'){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                 sh 'docker push billahmustasin/node-todo-test:latest'
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]){ 
+                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}" 
+                 sh 'docker push billahmustasin/node-todo-jen:latest'
                 }
+            }
+        }
+        stage('Test'){
+            steps{
+                echo "testing new build"
             }
         }
         stage('Deploy'){
@@ -27,4 +32,5 @@ pipeline {
         }
     }
 }
+
 
