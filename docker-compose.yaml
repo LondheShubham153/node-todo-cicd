@@ -2,6 +2,6 @@ version: '3.9'
 
 services:
   web:
-    image: billahmustasin/node-todo-test:latest
+    image: 'billahmustasin/node-todo-jen:latest'
     ports:
       - "8000:8000"
