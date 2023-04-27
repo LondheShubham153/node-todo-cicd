@@ -2,6 +2,6 @@ version: '3.3'
 
 services:
   web:
-    build: .
+    image: "haroonniamat029/knight-space:${BUILD_NUMBER}"
     ports:
       - "8000:8000"
