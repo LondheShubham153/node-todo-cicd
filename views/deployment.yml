@@ -16,7 +16,7 @@ spec:
         app: todo-app
     spec:
       containers:
-      - image: haroonniamat029/knight-space:3
+      - image: trainwithshubham/node-todo-app-cicd:latest
         name: todo-app
         imagePullPolicy: Always
         ports: 
