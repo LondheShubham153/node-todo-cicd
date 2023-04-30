@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: todo-app-container
     spec:
       containers:
-      - image: haroonniamat029/knight-space:${BUILD_NUMBER}
+      - image: haroonniamat029/knight-space:3
         imagePullPolicy: Always
         name: todo-app-container
         ports:
