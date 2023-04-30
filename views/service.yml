@@ -9,7 +9,7 @@ spec:
   - port: 80 #change to 80
     protocol: TCP
     targetPort: 80 #change to 80
-    nodePort: 30333
+    nodePort: 30331
   selector:
     app: todo-app
   type: NodePort
