@@ -2,6 +2,6 @@ version: '3.3'
 
 services:
   web:
-    image: "haroonniamat029/knight-space:${BUILD_NUMBER}"
+    image: "haroonniamat029/hamza:latest
     ports:
       - "8000:8000"
