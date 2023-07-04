@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   docker_hub:
-    name: docker hub push to do project
+    name: docker hub push to do project ji
     runs-on: ubuntu-latest
     
     steps:
