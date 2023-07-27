@@ -15,7 +15,14 @@
 
     <body>
         <h1>CI-CD ToDo App</h1>
-        <ul>
+        <form action="/todo/add/" method="post">
+            <p>
+                <label for="newtodo">What shoud I do?</label>
+                <input type="text" name="newtodo" id="newtodo" autofocus />
+                <input type="submit" value="Add" />
+            </p>
+        </form>
+<ul>
             <% todolist.forEach(function(todo, index) { %>
             <li>
                 <%- todo %>
@@ -25,14 +32,6 @@
             </li>
             <% }); %>
         </ul>
-
-        <form action="/todo/add/" method="post">
-            <p>
-                <label for="newtodo">What shoud I do?</label>
-                <input type="text" name="newtodo" id="newtodo" autofocus />
-                <input type="submit" value="Add" />
-            </p>
-        </form>
     </body>
 
 </html>
