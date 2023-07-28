@@ -3,7 +3,7 @@
 <html>
 
     <head>
-        <title>Todo List APP test</title>
+        <title>Todo App</title>
         <style>
             a {
                 text-decoration: none;
@@ -14,17 +14,7 @@
     </head>
 
     <body>
-        <h1>Jenkins is just Amazing, Awesome and I will attend Live sessions</h1>
-        <ul>
-            <% todolist.forEach(function(todo, index) { %>
-            <li>
-                <a href="/todo/delete/<%= index %>">✘</a>
-                <a href="/todo/<%= index %>">✎</a>
-                <%- todo %>
-            </li>
-            <% }); %>
-        </ul>
-
+        <h1>CI-CD ToDo App</h1>
         <form action="/todo/add/" method="post">
             <p>
                 <label for="newtodo">What shoud I do?</label>
@@ -32,6 +22,16 @@
                 <input type="submit" value="Add" />
             </p>
         </form>
+<ul>
+            <% todolist.forEach(function(todo, index) { %>
+            <li>
+                <%- todo %>
+                <a href="/todo/delete/<%= index %>">✘</a>
+                <a href="/todo/<%= index %>">✎</a>
+                
+            </li>
+            <% }); %>
+        </ul>
     </body>
 
 </html>
