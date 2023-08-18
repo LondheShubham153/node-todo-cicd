@@ -8,7 +8,7 @@ pipeline {
         }
         stage("Build and Test"){
             steps{
-                sh "docker build . -t node-app-test-new"
+                sh "docker build . -t node-app"
             }
         }
 
