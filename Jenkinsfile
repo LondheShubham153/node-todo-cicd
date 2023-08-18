@@ -11,7 +11,6 @@ pipeline {
                 sh "docker build . -t node-app-test-new"
             }
         }
-        }
         stage("Deploy"){
             steps{
                 sh "docker-compose down && docker-compose up -d"
