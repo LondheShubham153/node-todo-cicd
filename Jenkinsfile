@@ -1,31 +1,33 @@
 pipeline {
-    agent { label 'Dev-Agent'}
-    stages {
-        stage('Clone Code') {
-            steps {
-                echo 'Clonning the code from github repo...'
-                git url: 'https://github.com/ashubambal/node-todo-cicd.git', branch: 'master'
-            }
-        }
-        stage('Build and Test') {
-            steps {
-                echo 'Building and Testing the code...'
-                sh 'docker build . -t softconsist/todo-app:latest'
-            }
-        }
-        stage("Push to Docker Hub"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"softconsist",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker tag todo-app ${env.dockerHubUser}/todo-app:latest"
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker push ${env.dockerHubUser}/todo-app:latest"
+    agent any
+        stages {
+            stage("Code Clone") {
+                steps{
+                    echo "Cloing code from github"
+                    git url: "https://github.com/ashubambal/node-todo-cicd.git", branch: "master"
                 }
             }
-        }    
-        stage("Deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
+            stage("Code Build & Test") {
+                steps{
+                    echo "Building and image"
+                    sh "docker build -t node-app-demo ."
+                }
             }
-        }                    
-    }
-}
+            stage("Code Push on DockerHub") {
+                steps{
+                    echo "pushing code on dockerhub"
+                    withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                        sh "docker tag node-app-demo ${env.dockerHubUser}/node-app-demo:latest"
+                        sh "docker push ${env.dockerHubUser}/node-app-demo:latest "
+                    }
+                }
+            }
+            stage("Code Deploy") {
+                steps{
+                    echo "Deploying code"
+                    sh "docker-compose down && docker-compose up -d"
+                }
+            }
+        }
+} 
