@@ -15,5 +15,7 @@ Run these commands:
 
 or Run by docker compose
 
-test
+test done
+
+Done
 
