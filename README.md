@@ -13,7 +13,5 @@ Run these commands:
 
 `node app.js`
 
-or Run by docker compose 1234
 
-test 123343443
 
