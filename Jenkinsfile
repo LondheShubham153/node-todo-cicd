@@ -22,7 +22,7 @@ pipeline {
         }
         stage("Deploy image on the EC2") {
             steps{
-                sh "docker-compose down"
+                sh "docker-compose down --remove-orphans"
                 sh "docker-compose up -d"
             }
         }
