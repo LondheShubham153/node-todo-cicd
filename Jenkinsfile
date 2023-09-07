@@ -17,7 +17,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                     sh "docker tag two-tier-flask-app ${env.dockerHubUser}/two-tier-flask-app"
-                    sh "docker push ${env.dockerHubUser}/node-app-test-new:latest" 
+                    sh "docker push ${env.dockerHubUser}/node-app-test-new:latest" two-tier-flask-app
+                    sh ""
                 }
             }
         }
