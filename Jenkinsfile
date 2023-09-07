@@ -1,30 +1,31 @@
 pipeline {
     agent any
-    
     stages{
-        stage("Code"){
+        stage("Clone the Code from GITHub") {
             steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
+                git url: 'https://github.com/sujitsahoo0285/two-tier-flask-app', branch: 'master'
             }
         }
-        stage("Build & Test"){
+        stage("Build & Test") {
             steps{
-                sh "docker build . -t node-app-test-new"
+                sh "docker build . -t two-tier-flask-app"
             }
         }
-        stage("Push to DockerHub"){
+        stage("Push to DockerHub") {
             steps{
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker tag node-app-test-new ${env.dockerHubUser}/node-app-test-new:latest"
-                    sh "docker push ${env.dockerHubUser}/node-app-test-new:latest" 
+                    sh "docker tag node-app-demo ${env.dockerHubUser}/two-tier-flask-app:latest"
+                    sh "docker push ${env.dockerHubUser}/two-tier-flask-app:latest"
                 }
             }
         }
-        stage("Deploy"){
+        stage("Deploy image on the EC2") {
             steps{
-                sh "docker-compose down && docker-compose up -d"
+                sh "docker-compose down --remove-orphans"
+                sh "docker-compose up -d"
             }
         }
+
     }
 }
