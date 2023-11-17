@@ -1,25 +1,100 @@
 <!DOCTYPE html>
-
 <html>
-
     <head>
         <title>Todo List APP test</title>
         <style>
-            a {
-                text-decoration: none;
-                color: black;
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+                margin: 0;
+                padding: 0;
             }
 
+            h1 {
+                background-color: #4CAF50;
+                color: white;
+                margin: 0;
+                padding: 20px;
+                text-align: center;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            ul li {
+                background: #fff;
+                border: 1px solid #ddd;
+                margin-bottom: 10px;
+                padding: 10px;
+                position: relative;
+            }
+
+            ul li a {
+                color: #333;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            ul li a:hover {
+                color: #4CAF50;
+            }
+
+            .delete-btn {
+                color: red;
+                position: absolute;
+                right: 10px;
+                top: 10px;
+            }
+
+            .edit-btn {
+                color: #FFC107;
+                position: absolute;
+                right: 40px;
+                top: 10px;
+            }
+
+            form {
+                background: #fff;
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+            }
+
+            input[type="submit"] {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+
+            input[type="submit"]:hover {
+                background-color: #45a049;
+            }
         </style>
     </head>
 
     <body>
-        <h1>Batch 5 is just Amazing, Awesome,shaandaar, majedaar and I will attend Live sessions</h1>
+        <h1>Todo List - Made using Node</h1>
         <ul>
             <% todolist.forEach(function(todo, index) { %>
             <li>
-                <a href="/todo/delete/<%= index %>">✘</a>
-                <a href="/todo/<%= index %>">✎</a>
+                <a href="/todo/delete/<%= index %>" class="delete-btn">✘</a>
+                <a href="/todo/<%= index %>" class="edit-btn">✎</a>
                 <%- todo %>
             </li>
             <% }); %>
@@ -27,11 +102,10 @@
 
         <form action="/todo/add/" method="post">
             <p>
-                <label for="newtodo">What shoud I do?</label>
+                <label for="newtodo">What should I do?</label>
                 <input type="text" name="newtodo" id="newtodo" autofocus />
                 <input type="submit" value="Add" />
             </p>
         </form>
     </body>
-
 </html>
