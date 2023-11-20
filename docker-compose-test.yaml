@@ -1,0 +1,10 @@
+version: '3'
+services:
+    Web:
+      image: nginx:latest
+      ports:
+      -"80:80"
+    db:
+      images: postgres:latest
+      environment:
+        POSTGRES_PASSWORD :test@123
