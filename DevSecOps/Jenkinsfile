@@ -68,7 +68,7 @@ pipeline{
         
         stage("Code Deploy"){
             steps{    
-                sh "docker run -d -p 8000:8000 madhupdevops/nodeapp:latest"
+                sh "docker-compose down && docker-compose up -d"
             }
         }
     }
