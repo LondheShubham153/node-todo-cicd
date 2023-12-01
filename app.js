@@ -1,6 +1,6 @@
 const express = require('express'),
     bodyParser = require('body-parser'),
-    // In order to use PUT HTTP verb to edit item
+    // In order to use PUT HTTP verb to edit item nhmjmmmmmmmmm
     methodOverride = require('method-override'),
     // Mitigate XSS using sanitizer
     sanitizer = require('sanitizer'),
@@ -68,7 +68,7 @@ app.get('/todo', function (req, res) {
     // Edit item in the todo list 
     .put('/todo/edit/:id', function (req, res) {
         let todoIdx = req.params.id;
-        // Escapes HTML special characters in attribute values as HTML entities
+        // Escapes HTML special characters in attribute values as HTML entitieshjn
         let editTodo = sanitizer.escape(req.body.editTodo);
         if (todoIdx != '' && editTodo != '') {
             todolist[todoIdx] = editTodo;
