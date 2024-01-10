@@ -22,6 +22,7 @@ app.use(methodOverride(function (req, res) {
 
 
 let todolist = [];
+let todolist1 = [1];
 
 /* The to do list and the form are displayed */
 app.get('/todo', function (req, res) {
