@@ -2,6 +2,6 @@ version: '3.9'
 
 services:
   web:
-    image: "vinayaksarode/node-app:latest"
+    image: "vinayaksarode/node-app-test:latest"
     ports:
       - "8000:8000"
