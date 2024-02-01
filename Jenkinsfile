@@ -1,40 +1,46 @@
 pipeline {
-    agent { label "dev-server"}
+    agent any
     
     stages {
         
-        stage("code"){
+        stage("Code"){
             steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
+                git url: "https://github.com/Vinayaksarode/node-todo-cicd.git", branch: "master"
+                echo "code clone ho gaya"
+                
             }
+            
         }
-        stage("build and test"){
-            steps{
-                sh "docker build -t node-app-test-new ."
-                echo 'code build bhi ho gaya'
-            }
+        stage("Build & Test"){
+           steps{
+               sh "docker build -t node-app-test ."
+               echo "code build ho gaya"
+               
+           } 
         }
-        stage("scan image"){
+        stage("Scan"){
             steps{
-                echo 'image scanning ho gayi'
+                echo "image scan ho gyi"
             }
         }
         stage("push"){
-            steps{
+          steps{
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag node-app-test-new:latest ${env.dockerHubUser}/node-app-test-new:latest"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
-                echo 'image push ho gaya'
+                sh "docker tag node-app-test:latest ${env.dockerHubUser}/node-app-test:latest"
+                sh "docker push ${env.dockerHubUser}/node-app-test:latest"
+                echo "code push ho gya"
                 }
-            }
+              
+          }  
         }
-        stage("deploy"){
+        stage("Deploy"){
             steps{
                 sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
+                echo "code deploy ho gya"
+                
             }
+            
         }
     }
 }
