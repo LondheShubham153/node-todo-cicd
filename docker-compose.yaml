@@ -2,6 +2,6 @@ version: '3'
 
 services:
   web:
-          image: "node-todo-app:0.1"
+    image: "node-todo-app:0.1"
     ports:
       - "8000:8000"
