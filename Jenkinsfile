@@ -1,39 +1,32 @@
 pipeline {
-    agent { label "dev-server"}
-    
+    agent any
     stages {
-        
-        stage("code"){
+        stage("Code"){
             steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
+            git url: "https://github.com/sandipumbare90/node-todo-cicd.git", branch: "master"
+            echo "Code Copied"
             }
         }
-        stage("build and test"){
+        stage("Build"){
             steps{
-                sh "docker build -t node-app-test-new ."
-                echo 'code build bhi ho gaya'
+            sh "docker build -t node-todo-app:latest ."
+            echo "Code Copied"
             }
         }
-        stage("scan image"){
+        stage("Test"){
             steps{
-                echo 'image scanning ho gayi'
+            withCredentials([usernamePassword(credentialsId:"dockerHubCreds",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+            sh "docker tag node-todo-app:latest ${env.dockerHubUser}/node-todo-app:latest"
+            sh "docker push ${env.dockerHubUser}/node-todo-app:latest"
+            echo "Testing completed"
             }
+          }
         }
-        stage("push"){
+        stage("Deploy"){
             steps{
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag node-app-test-new:latest ${env.dockerHubUser}/node-app-test-new:latest"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
-                echo 'image push ho gaya'
-                }
-            }
-        }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
+            sh "docker-compose down && docker-compose up -d"
+            echo "Deploy completed"
             }
         }
     }
