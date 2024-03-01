@@ -56,13 +56,13 @@ pipeline{
         
         stage("Docker Tag"){
             steps{
-                sh "docker tag nodeapp:latest madhupdevops/nodeapp:latest"
+                sh "docker tag nodeapp:latest trainwithshubham/nodeapp:latest"
             }
         }
         
         stage("Code Push to DockerHub"){
             steps{
-                sh "docker push madhupdevops/nodeapp:latest"
+                sh "docker push trainwithshubham/nodeapp:latest"
             }
         }
         
