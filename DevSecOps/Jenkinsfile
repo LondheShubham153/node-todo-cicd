@@ -1,3 +1,4 @@
+
 pipeline {
     
     agent any
@@ -12,13 +13,6 @@ pipeline {
                 echo "Code Cloned Successfully"
             }
         }
-        stage("Build & Test"){
-            steps{
-                sh 'docker build -t node-app-batch-6:latest .'
-                echo "Code Built Successfully"
-            }
-        }
-        
         stage("SonarQube Analysis"){
             steps{
                withSonarQubeEnv("Sonar"){
@@ -37,6 +31,12 @@ pipeline {
             steps{
                 dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'OWASP'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage("Build & Test"){
+            steps{
+                sh 'docker build -t node-app-batch-6:latest .'
+                echo "Code Built Successfully"
             }
         }
         stage("Trivy"){
