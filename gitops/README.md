@@ -1,8 +1,23 @@
 ## Pre-requisites
 - for optimal performance ArgoCD requires a minimum of 4GB of RAM to run efficiently. consider utilizing an instance size such as t2.medium or t2.large.
 - docker should be up n runnin w sudo privilege
-
-
+  
+## install docker if not already installed
+```bash
+sudo apt update
+```
+```bash
+sudo apt install -y curl wget apt-transport-https
+```
+```bash
+sudo apt install -y docker.io
+```
+```bash
+sudo systemctl enable --now docker
+```
+```bash
+sudo chown $USER /var/run/docker.sock
+```
 ## install minikube cluster
 ```bash
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -34,6 +49,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 ![Screenshot from 2024-03-11 13-31-39](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/e9d1df3e-d481-43ca-9d2b-48c5c88259d3)
 
+wait a few seconds before executin this command
  ```bash
 kubectl port-forward svc/argocd-server -n argocd 8088:443 --address 0.0.0.0 &
 ```
@@ -58,9 +74,15 @@ echo < password > | base64 -d
 ![Screenshot from 2024-03-11 13-38-21](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/de4272ca-6f5b-481c-b403-277aa789c3da)
 ![Screenshot from 2024-03-11 13-39-16](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/3c340419-cb1a-4501-8deb-0aca2cd48363)
 ensure to specify the path where your manifests are located 
+
 ![Screenshot from 2024-03-11 13-39-53](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/b3352ba2-fba2-414d-adca-7fce08735fcc)
 if the deployment.yaml file includes a namespace , make sure to create the namespace
+
+
+
+
 ![Screenshot from 2024-03-11 13-40-55](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/a3a7b0a4-9b0d-422f-bb0b-369d57842921)
+
 ArgoCD automatically syncs deployments but if you want to set a specific timer u'll need to configure a ConfigMap accordingly.
 ```bash
 kubectl edit configmap argocd-cmd-params-cm -n argocd
