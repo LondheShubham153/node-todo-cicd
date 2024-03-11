@@ -1,16 +1,43 @@
+## Pre-requisites
+- for optimal performance ArgoCD requires a minimum of 4GB of RAM to run efficiently. consider utilizing an instance size such as t2.medium or t2.large.
+- docker should be up n runnin w sudo privilege
+
+
+## install minikube cluster
+```bash
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+```
+```bash
+chmod +x minikube
+sudo mv minikube /usr/local/bin/
+```
+## install kubectl 
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+```bash
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+```
+## start minikube cluster
+```bash
+minikube start --driver=docker
+```
+![Screenshot from 2024-03-11 13-30-46](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/c25744c9-d731-42d4-9327-2ed7b4cf25dc)
+
 #  install argocd
 
-```
+```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
 ![Screenshot from 2024-03-11 13-31-39](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/e9d1df3e-d481-43ca-9d2b-48c5c88259d3)
 
- ```
+ ```bash
 kubectl port-forward svc/argocd-server -n argocd 8088:443 --address 0.0.0.0 &
 ```
- to resolve the port conflict between jenkins n argocd , i configured argocd to run on port 8088. in 
+ to resolve the port conflict between jenkins n argocd , i configured argocd to run on port 8088. 
 
 ![Screenshot from 2024-03-11 13-34-05](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/9e234187-2a8d-4d12-9682-bd210d5661ab)
 ![Screenshot from 2024-03-11 13-35-06](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/3eb46fc3-3d81-4647-bd88-18448e1b5f42)
@@ -18,12 +45,12 @@ kubectl port-forward svc/argocd-server -n argocd 8088:443 --address 0.0.0.0 &
 
 its important to keep this terminal open as it's currently handlin the connection to the ArgoCD server. opening a new tab for SSH commands will ensure smooth execution without disrupting your current session. 
 
-```
+```bash
 kubectl edit secret argocd-initial-admin-secret -n argocd
 ```
 ![Screenshot from 2024-03-11 13-36-58](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/07b6adab-7566-4dff-a0c4-bdd17a4f0289)
 
-```
+```bash
 echo < password > | base64 -d
 ```
 # now lets get stuff deployed 
@@ -35,7 +62,7 @@ ensure to specify the path where your manifests are located
 if the deployment.yaml file includes a namespace , make sure to create the namespace
 ![Screenshot from 2024-03-11 13-40-55](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/a3a7b0a4-9b0d-422f-bb0b-369d57842921)
 ArgoCD automatically syncs deployments but if you want to set a specific timer u'll need to configure a ConfigMap accordingly.
-```
+```bash
 kubectl edit configmap argocd-cmd-params-cm -n argocd
 ```
 ![Screenshot from 2024-03-11 13-45-43](https://github.com/teresashellvin/node-todo-cicd/assets/146912102/9e9d62d1-60b5-4c09-a0d2-01e33d0a3903)
