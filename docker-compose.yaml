@@ -2,6 +2,6 @@ version: '3.9'
 
 services:
   web:
-    image: "trainwithshubham/node-todo-cicd:latest"
+    image: "ishti786/node-todo-cicd:latest"
     ports:
       - "8000:8000"
