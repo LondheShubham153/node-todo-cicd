@@ -73,7 +73,7 @@ To deploy an application, apply the YAML configuration file to your namespace:
 
 ```bash
 
-kubectl apply - <path-to-overlays-environment> .
+kubectl apply -k <path-to-overlays-environment> 
 ```
 
 # Useful Commands
