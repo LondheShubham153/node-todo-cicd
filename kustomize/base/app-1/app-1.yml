@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-1
+  name: app-1-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-1
+  template:
+    metadata:
+      labels:
+        app: app-1
+    spec:
+      containers:
+      - name: app-1-containter
+        image: trainwithshubham/node-app-test-new:latest
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app-1
+  name: app-1-service
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - name: webport
+    port: 8000
+    targetPort: 8000
+  selector:
+    app: app-1   
