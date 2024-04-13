@@ -67,13 +67,13 @@ You can create a Kubernetes namespace using the following command:
 ``` bash
 kubectl create namespace <namespace-name>
 ```
-# Deploy an Application
+# Deploy an Application using Kustomize
 
 To deploy an application, apply the YAML configuration file to your namespace:
 
 ```bash
 
-kubectl apply -f <path-to-yaml-file>
+kubectl apply - <path-to-overlays-environment> .
 ```
 
 # Useful Commands
