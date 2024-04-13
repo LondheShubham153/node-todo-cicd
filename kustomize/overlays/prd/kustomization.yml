@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: prd-mapping
+
+namespace: prd
+namePrefix: prd-
+
+replicas:
+- name: app-1-deployment
+  count: 2
+
+resources:
+  - ../../base/app-1/
+  - ../../base/ingress/
+
+
+patches:
+- target:
+    kind: Ingress
+    name: app-ingress
+  path: prd-ingress-patch.json
