@@ -7,12 +7,12 @@ pipeline {
                 git url: "https://github.com/jahid4321/node-todo-cicd.git", branch: "master"
             }
         }
-       ###### stage("Build and Test"){
+        stage("Build and Test"){
             steps{
                 sh "docker build . -t node-app-test-new"
             }
         }
-       ### stage("Push to Docker Hub"){
+        stage("Push to Docker Hub"){
             steps{
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                 sh "docker tag node-app-test-new ${env.dockerHubUser}/node-app-test-new:latest"
