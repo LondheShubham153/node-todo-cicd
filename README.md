@@ -16,4 +16,4 @@ Run these commands:
 or Run by docker compose
 
 test
-
+rub by docker compose
