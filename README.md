@@ -13,6 +13,13 @@ Run these commands:
 
 `node app.js`
 
+`node app.js`
+`node app.js`
+`node app.js`
+`node app.js`
+`node app.js`
+
+
 or Run by docker compose
 
 test
