@@ -1,40 +1,34 @@
 pipeline {
-    agent { label "dev-server"}
-    
+    agent any
+
     stages {
-        
-        stage("code"){
-            steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/zohaib9990/node-todo-cicd.git'
             }
         }
-        stage("build and test"){
-            steps{
-                sh "docker build -t node-app-test-new ."
-                echo 'code build bhi ho gaya'
-            }
-        }
-        stage("scan image"){
-            steps{
-                echo 'image scanning ho gayi'
-            }
-        }
-        stage("push"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag node-app-test-new:latest ${env.dockerHubUser}/node-app-test-new:latest"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
-                echo 'image push ho gaya'
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image
+                    sh 'docker build -t node-app-todo .'
                 }
             }
         }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run Docker container
+                    sh 'docker run -d --name node-todo-app -p 8080:8000 node-app-todo'
+                }
             }
+        }
+    }
+    post {
+        always {
+            // Clean up Docker containers and images
+            sh 'docker rm -f node-todo-app || true'
+            sh 'docker rmi -f node-app-todo || true'
         }
     }
 }
