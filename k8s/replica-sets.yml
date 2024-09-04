@@ -20,4 +20,4 @@ spec:
     spec:
       containers:
       - name: node-container-rep
-        image: trainwithshubham/node-app-batch-6
+        image: darshif5/simple-node-app:node-app-test-new
