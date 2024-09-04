@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-app-deployment
-  namespace: node1
+  namespace: node155
   labels:
     app: node-app
 spec:
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       name: node-pod
-      namespace: node1
+      namespace: node155
       labels:
         app: node-app
     spec:
