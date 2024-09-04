@@ -20,4 +20,4 @@ spec:
     spec:
       containers:
       - name: node-container-rep
-        image: darshif5/simple-node-app:node-app-test-new
+        image: darshif5/simple-node-app:node-todo
