@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: node-container
-          image: darshif5/simple-node-app:node-app-test-new
+          image: darshif5/simple-node-app:node-todo
           ports:
             - containerPort: 8000
           resources:
