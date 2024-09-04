@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: node-app-replica-set
-  namespace: node-app
+  namespace: node155
   labels:
     app: guestbook
     tier: node-label
@@ -14,7 +14,7 @@ spec:
       tier: node-label
   template:
     metadata:
-      namespace: node-app
+      namespace: node155
       labels:
         tier: node-label
     spec:
