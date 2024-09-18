@@ -108,7 +108,7 @@ java -version
 
 ```bash
 sudo apt install docker.io
-sudo usermod -aG docker jenkins
+sudo usermod -a -G docker jenkins
 sudo systemctl restart jenkins
 ```
 
@@ -118,13 +118,13 @@ sudo systemctl restart jenkins
 
     ```bash
     # Remove the existing container if it exists (ignore errors)
-    docker rm -f ami-todo-app || true
+    docker rm -f <desired_name_1> || true
 
     # Build the Docker image
-    docker build . -t node-todo-app
+    docker build . -t <desired_name_2>
 
     # Run the container
-    docker run --rm -d --name ami-todo-app -p 8000:8000 node-todo-app
+    docker run --rm -d --name <desired_name_1> -p 8000:8000 <desired_name_2>
     ```
 
 ### 10. Install GitHub Integration Plugin
@@ -163,6 +163,3 @@ Every push to your GitHub repository will trigger Jenkins to:
 With this Jenkins CI/CD pipeline, you have automated the process of building, testing, and deploying your Node.js application on AWS EC2. The integration with GitHub ensures that any changes pushed to the repository are automatically deployed, fostering continuous development and deployment.
 
 Feel free to explore the project and implement similar setups for your own applications!
-
-**Repository Used**:
-- [GitHub Repo - Node.js To-Do CI/CD](https://github.com/Amitabh-DevOps/node-todo-cicd)
