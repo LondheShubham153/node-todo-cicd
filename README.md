@@ -163,3 +163,45 @@ Every push to your GitHub repository will trigger Jenkins to:
 With this Jenkins CI/CD pipeline, you have automated the process of building, testing, and deploying your Node.js application on AWS EC2. The integration with GitHub ensures that any changes pushed to the repository are automatically deployed, fostering continuous development and deployment.
 
 Feel free to explore the project and implement similar setups for your own applications!
+
+
+### Output of My Project :
+
+1 ) Making changes in Github repo :
+![Screenshot 2024-09-18 191337](https://github.com/user-attachments/assets/6b6fd824-9224-4bff-a9e0-0f38ee0d9d5b)
+
+
+
+2 ) Checking the Contineous Integration of code on Jenkins :
+![Screenshot 2024-09-18 191414](https://github.com/user-attachments/assets/87a144a6-f540-486d-be93-1595fc828631)
+
+
+
+3 ) Changes is Successfully applied to Project using Github push :
+![Screenshot 2024-09-18 191624](https://github.com/user-attachments/assets/f0635535-3601-4eb2-9caf-39d42b3ac4c6)
+
+
+
+4 ) Checking the Output :
+![Screenshot 2024-09-18 191632](https://github.com/user-attachments/assets/b40e772b-dcf2-4d71-ab45-a731397ef20e)
+
+
+
+5 ) Testing the Deployed Project by checking its Features :
+![Screenshot 2024-09-18 191654](https://github.com/user-attachments/assets/149984c9-0da1-45eb-95d9-041f2285adf0)
+
+
+
+6 ) Checking Contineous Integration is Working or NOT :
+![Screenshot 2024-09-18 191901](https://github.com/user-attachments/assets/64729aac-724b-4084-8dc3-07ae6a73ffd1)
+
+![Screenshot 2024-09-18 191912](https://github.com/user-attachments/assets/73a16866-fd7e-4a40-af40-de0c62a97e64)
+
+![Screenshot 2024-09-18 191925](https://github.com/user-attachments/assets/b9714915-9b7d-4919-b275-8f29a6c91037)
+
+
+
+
+
+
+
