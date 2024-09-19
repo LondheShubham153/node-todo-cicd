@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-app-deployment
-  namespace: node-app
+  namespace: node155
   labels:
     app: node-app
 spec:
@@ -13,13 +13,13 @@ spec:
   template:
     metadata:
       name: node-pod
-      namespace: node-app
+      namespace: node155
       labels:
         app: node-app
     spec:
       containers:
         - name: node-container
-          image: trainwithshubham/node-app-batch-6
+          image: darshif5/simple-node-app:node-todo
           ports:
             - containerPort: 8000
           resources:

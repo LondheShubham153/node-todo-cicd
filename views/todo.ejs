@@ -12,7 +12,7 @@
             }
 
             h1 {
-                background-color: #4CAF50;
+                background-color: #a04589;
                 color: white;
                 margin: 0;
                 padding: 20px;
@@ -39,7 +39,7 @@
             }
 
             ul li a:hover {
-                color: #4CAF50;
+                color: #a04589;
             }
 
             .delete-btn {
@@ -75,7 +75,7 @@
             }
 
             input[type="submit"] {
-                background-color: #4CAF50;
+                background-color: #a04589;
                 color: white;
                 border: none;
                 padding: 10px 20px;
@@ -83,13 +83,13 @@
             }
 
             input[type="submit"]:hover {
-                background-color: #45a049;
+                background-color: #a04589;
             }
         </style>
     </head>
 
     <body>
-        <h1>Todo List - Made for Batch 7</h1>
+        <h1>Plan The Weekly Agenda</h1>
         <ul>
             <% todolist.forEach(function(todo, index) { %>
             <li>
@@ -102,7 +102,7 @@
 
         <form action="/todo/add/" method="post">
             <p>
-                <label for="newtodo">What should I do?</label>
+                <label for="newtodo">Draft the weekly agenda?</label>
                 <input type="text" name="newtodo" id="newtodo" autofocus />
                 <input type="submit" value="Add" />
             </p>
