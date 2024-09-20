@@ -11,19 +11,10 @@ pipeline {
         }
         stage("build and test"){
             steps{
-                sh "docker build -t node-app-test-new ."
+                sh "docker rm -f node-todo-app || true"
+                sh "docker build . -t todo-app"
+                sh "docker run --rm -d --name node-todo-app -p 8000:8000 todo-app"
                 echo 'code build bhi ho gaya'
-            }
-        }
-        stage("scan image"){
-            steps{
-                echo 'image scanning ho gayi'
-            }
-        }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
             }
         }
     }
