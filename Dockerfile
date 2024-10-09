@@ -2,7 +2,7 @@
 FROM node:12.2.0-alpine
 
 #Working Directry
-WORKDIR 
+WORKDIR /node
 
 #Copy the Code
 COPY . .
