@@ -1,213 +1,323 @@
-# Jenkins CI/CD with GitHub Integration (Deploying Node.js To-Do Application)
+# Step-by-Step Guide to Implementing CI/CD in Node.js Todo Applications
 
-## Overview
 
-This project demonstrates how to set up a CI/CD pipeline using Jenkins integrated with GitHub for continuous integration and deployment of a Node.js To-Do application on AWS EC2 using Docker. The pipeline automates the build, test, and deployment processes, ensuring that changes pushed to GitHub are automatically reflected in the deployed application.
+This documentation provides a comprehensive guide on setting up a **CI/CD pipeline** using **Jenkins** integrated with **GitHub** for continuous integration and deployment of a **Node.js To-Do application** on an **AWS EC2** instance. Jenkins will automatically pull code from GitHub, build it, and deploy it using **Docker**.
 
-## Resources
+**Repository Used in This Project:**
 
-- **Video Tutorial by Shubham Londhe**: [YouTube Video](https://www.youtube.com/watch?v=nplH3BzKHPk)
-- **Hashnode Blog**: [Detailed Project Overview](https://amitabhdevops.hashnode.dev/jenkins-cicd-with-github-integration)
+* [GitHub Repository - Node.js To-Do App](https://github.com/Amitabh-DevOps/Jenkins-CI-CD-Project-Todo-node-app)
+    
 
-## Steps to Complete the Project
+By following below steps, you can successfully complete the project!
 
-### 1. Create an EC2 Instance
+---
 
-1. **Login to AWS Console** and create a new EC2 instance with Ubuntu 24.04 LTS.
-2. **Configure Security Groups** to allow inbound traffic on ports 22 (SSH), 8080 (Jenkins), and 8000 (Node.js application).
+## **Steps to Complete the Project:**
 
-### 2. Connect to EC2 Instance
+### **1\. Login to AWS and Create an EC2 Instance**
+
+* **Login to your AWS account** through the [AWS Console](https://aws.amazon.com/console/).
+    
+* **Launch an EC2 instance**:
+    
+    * Navigate to the **EC2 Dashboard** and click on **Launch Instance**.
+        
+    * Choose **Ubuntu 24.04 LTS** as the operating system.
+        
+    * Select the **t2.micro** instance type (free-tier eligible).
+        
+    * Configure your **security groups** to allow **SSH (port 22)** access and also prepare ports **8080** (for Jenkins) and **8000** (for the web app).
+        
+    * Launch the instance and download the **.pem key** file for SSH access.
+        
+
+### **2\. Connect to the EC2 Instance**
+
+Connect to your newly created EC2 instance using **SSH**.
 
 ```bash
 ssh -i <your-key-file.pem> ubuntu@<instance-public-ip>
 ```
 
-### 3. Update the Instance
+### **3\. Update the Instance**
+
+Run the following command to update the instance with the latest package information:
 
 ```bash
 sudo apt update
 ```
 
-### 4. Install Java
+### **4\. Install Java**
+
+Since Jenkins is built in **Java**, it requires **Java** to run. Install **OpenJDK 17**:
 
 ```bash
 sudo apt install openjdk-17-jre
+```
+
+Verify the installation:
+
+```bash
 java -version
 ```
 
-### 5. Install Jenkins
+### **5\. Install Jenkins**
 
-1. **Install Dependencies**:
+Now, let's install **Jenkins**, which is essential for building the CI/CD pipeline.
 
-    ```bash
-    sudo apt-get install -y ca-certificates curl gnupg
-    ```
+a) Install dependencies required for Jenkins:
 
-2. **Add Jenkins GPG Key**:
+```bash
+sudo apt-get install -y ca-certificates curl gnupg
+```
 
-    ```bash
-    curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-    ```
+b) Add the Jenkins GPG key:
 
-3. **Add Jenkins Repository**:
+```bash
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+```
 
-    ```bash
-    echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-    ```
+c) Add Jenkins repository:
 
-4. **Update Package List**:
+```bash
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+```
 
-    ```bash
-    sudo apt-get update
-    ```
+d) Update the package list:
 
-5. **Install Jenkins**:
+```bash
+sudo apt-get update
+```
 
-    ```bash
-    sudo apt-get install jenkins
-    ```
+e) Install Jenkins:
 
-6. **Enable and Start Jenkins**:
+```bash
+sudo apt-get install jenkins
+```
 
-    ```bash
-    sudo systemctl enable jenkins
-    sudo systemctl start jenkins
-    sudo systemctl status jenkins
-    ```
+f) Enable Jenkins to start on boot:
 
-### 6. Access Jenkins
+```bash
+sudo systemctl enable jenkins
+```
 
-- **Open Jenkins**: `http://<instance-public-ip>:8080`
-- **Unlock Jenkins**: Retrieve the admin password:
+g) Start Jenkins if your jenkins is not running :
 
-    ```bash
-    sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-    ```
+```bash
+sudo systemctl start jenkins
+```
 
-- **Install Suggested Plugins** and create an admin user.
+h) Check Jenkins status to confirm it's running:
 
-### 7. Create a New Jenkins Project
+```bash
+sudo systemctl status jenkins
+```
 
-1. **Create New Item**: Name your project (e.g., **NodeJS To-Do App**), select **Freestyle Project**, and click **OK**.
-2. **Configure GitHub Integration**:
-   - Under **Source Code Management**, select **Git** and enter your GitHub repository URL.
-   - Add SSH keys for GitHub authentication.
-   - Generate SSH keys:
+### **6\. Open Jenkins in a Browser**
 
-     ```bash
-     ssh-keygen
-     ```
+Jenkins runs on **port 8080**. To access it:
 
-   - **Add Public Key to GitHub**: Go to **GitHub Settings** > **SSH and GPG Keys** > **New SSH Key**.
-   - **Add Private Key to Jenkins**: Go to **Source Code Management** > **Add Credentials** > **SSH Username with Private Key**.
+* **Modify the security group** of your EC2 instance to allow inbound traffic on **port 8080**.
+    
+* In your browser, go to `http://<instance-public-ip>:8080`.
+    
 
-3. **Configure Build Triggers**:
-   - Check **GitHub hook trigger for GITScm polling**.
+### **7\. Unlock Jenkins**
 
-### 8. Install Docker on EC2
+When accessing Jenkins for the first time, you'll be asked for an admin password.
+
+* Retrieve the initial admin password by running:
+    
+
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+
+* Copy the password and paste it into the Jenkins login screen.
+    
+
+### **8\. Install Suggested Jenkins Plugins**
+
+After entering the admin password, Jenkins will prompt you to install plugins. Select **Install Suggested Plugins** to get essential tools.
+
+### **9\. Create an Admin User**
+
+After plugins installation, Jenkins will prompt you to create your admin user account. Set a username and password for future logins.
+
+### **10\. Create a New Jenkins Project**
+
+Now, we'll create a **freestyle project** for our CI/CD pipeline.
+
+* Click on **New Item**.
+    
+* Enter a name for your project (e.g., **NodeJS To-Do App**).
+    
+* Select **Pipeline Project** and click **OK**.
+    
+
+### **11\. Configure GitHub Integration**
+
+In the new Jenkins project:
+
+* Under **Source Code Management**, select **Git**.
+    
+* Paste the **URL of your GitHub repository** where your Node.js To-Do application code is hosted.
+    
+
+### **12\. Configure Build Trigger for GitHub Webhook**
+
+To ensure Jenkins automatically pulls new code when changes are made on GitHub:
+
+* Go to **Build Triggers** and check **GitHub hook trigger for GITScm polling**.
+    
+
+### **13\. Paste below Pipeline script in Pipeline code in Groovy format :**
+
+```plaintext
+pipeline {
+    agent any
+    
+    stages {
+        
+        stage("code"){
+            steps{
+                git url: "https://github.com/Amitabh-DevOps/Jenkins-CI-CD-Project-Todo-node-app.git", branch: "master"
+                echo 'Bhaiya code clone hogaya'
+            }
+        }
+        stage("build and test"){
+            steps{
+                sh "docker build -t node-app ."
+                echo 'Code build done'
+            }
+        }
+        stage("deploy"){
+            steps{
+                sh "docker-compose down && docker-compose up -d --build"
+                echo 'Deployment also done'
+            }
+        }
+    }
+}
+```
+
+Now, Click on save and go to terminal .
+
+### **14\. Install Docker on EC2 Instance**
+
+Since we will deploy the Node.js app inside a Docker container, Docker needs to be installed on your EC2 instance.
+
+* Install Docker:
+    
 
 ```bash
 sudo apt install docker.io
-sudo usermod -a -G docker jenkins
+```
+
+* Add Jenkins to the **docker** group:
+    
+
+```bash
+sudo usermod -aG docker jenkins
+```
+
+* Restart Jenkins to apply changes:
+    
+
+```bash
 sudo systemctl restart jenkins
 ```
 
-### 9. Configure Build Steps
+### **15\. Configure GitHub Webhook**
 
-1. **Add Build Step**: Select **Execute Shell** and paste the following commands:
+GitHub needs to notify Jenkins whenever new code is pushed.
 
-    ```bash
-    # Remove the existing container if it exists (ignore errors)
-    docker rm -f <desired_name_1> || true
+* Go to your GitHub repository settings and click on **Webhooks**.
+    
+* Add a new webhook with the following details:
+    
+    * **Payload URL**: `http://<instance-public-ip>:8080/github-webhook/`
+        
+    * **Content Type**: `application/json`
+        
+* Save the webhook and ensure it shows a green tick, indicating success.
+    
 
-    # Build the Docker image
-    docker build . -t <desired_name_2>
+### **16\. Open Application Port 8000**
 
-    # Run the container
-    docker run --rm -d --name <desired_name_1> -p 8000:8000 <desired_name_2>
-    ```
+To allow access to your deployed Node.js application:
 
-### 10. Install GitHub Integration Plugin
+* Modify the security group of your EC2 instance to allow inbound traffic on **port 8000**.
+    
 
-- **Navigate to**: **Manage Jenkins** > **Manage Plugins** > **Available Plugins**.
-- **Install**: **GitHub Integration Plugin** and restart Jenkins.
+### **17\. Access the Application**
 
-### 11. Configure GitHub Webhook
+You can now access the deployed Node.js To-Do application by navigating to:
 
-- **Go to GitHub Repository Settings** > **Webhooks**.
-- **Add Webhook**:
-   - **Payload URL**: `http://<instance-public-ip>:8080/github-webhook/`
-   - **Content Type**: `application/json`
+```bash
+http://<instance-public-ip>:8000
+```
 
-### 12. Open Application Port 8000
+### **18\. Continuous Integration and Deployment**
 
-- **Modify Security Group** of your EC2 instance to allow inbound traffic on port **8000**.
+Every time you push code changes to your GitHub repository, Jenkins will:
 
-### 13. Access the Deployed Application
-
-- **Visit**: `http://<instance-public-ip>:8000`
-
-### 14. Continuous Deployment
-
-Every push to your GitHub repository will trigger Jenkins to:
-
-1. Pull the latest code.
+1. Automatically pull the latest changes.
+    
 2. Build a new Docker image.
-3. Remove old containers.
+    
+3. Remove any old containers.
+    
 4. Deploy the updated application.
+    
+
+This ensures continuous integration and continuous deployment of your application.
 
 ---
 
 ## **Conclusion**
 
-With this Jenkins CI/CD pipeline, you have automated the process of building, testing, and deploying your Node.js application on AWS EC2. The integration with GitHub ensures that any changes pushed to the repository are automatically deployed, fostering continuous development and deployment.
+This Jenkins CI/CD pipeline automates the entire process of **building**, **testing**, and **deploying** your Node.js application on **AWS EC2** using **Docker**. With the integration of **GitHub webhooks**, any push to your GitHub repository will trigger Jenkins to update your live application seamlessly.
 
-Feel free to explore the project and implement similar setups for your own applications!
+---
 
-
-# Output of My Project :
+# <mark>Output of My Project :</mark>
 
 1 ) Making changes in Github repo :
 
-![Screenshot 2024-09-18 191337](https://github.com/user-attachments/assets/6b6fd824-9224-4bff-a9e0-0f38ee0d9d5b)
-
-
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152682118/77926fed-70e0-410a-a75c-877b2216f0a7.png align="center")
 
 2 ) Checking the Contineous Integration of code on Jenkins :
 
-![Screenshot 2024-09-18 191414](https://github.com/user-attachments/assets/87a144a6-f540-486d-be93-1595fc828631)
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152713449/9546322b-2010-4c7e-bcb1-2b643db80826.png align="center")
 
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152748842/d2891b5a-33e5-4039-89c4-743a38f2f065.png align="center")
 
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152758854/2ebce78b-3a91-456e-ab09-5d6696c51d4a.png align="center")
 
 3 ) Changes is Successfully applied to Project using Github push :
 
-![Screenshot 2024-09-18 191624](https://github.com/user-attachments/assets/f0635535-3601-4eb2-9caf-39d42b3ac4c6)
-
-
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152783819/6fac0c13-5183-412a-9f15-c950444efa7a.png align="center")
 
 4 ) Checking the Output :
 
-![Screenshot 2024-09-18 191632](https://github.com/user-attachments/assets/b40e772b-dcf2-4d71-ab45-a731397ef20e)
-
-
+* Previous output:
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152837608/f12d902b-663a-48c2-83b3-0dde14d2a38c.png align="center")
+    
+* After updating application code :
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152903530/41c95601-6d01-4192-99c1-2aa91c994b00.png align="center")
+    
 
 5 ) Testing the Deployed Project by checking its Features :
 
-![Screenshot 2024-09-18 191654](https://github.com/user-attachments/assets/149984c9-0da1-45eb-95d9-041f2285adf0)
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152927888/c8fb9516-d837-4a0c-ac32-928e9962da05.png align="center")
 
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152955978/3336ac59-05c0-45ee-aa70-7eaf0029a61b.png align="center")
 
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152964053/43a6d692-5a57-44a2-81f1-9e5e86e023cd.png align="center")
 
-6 ) Checking Contineous Integration is Working or NOT :
+6 ) Also Checked Contineous Integration is Working or NOT :
 
-![Screenshot 2024-09-18 191901](https://github.com/user-attachments/assets/64729aac-724b-4084-8dc3-07ae6a73ffd1)
-
-![Screenshot 2024-09-18 191912](https://github.com/user-attachments/assets/73a16866-fd7e-4a40-af40-de0c62a97e64)
-
-![Screenshot 2024-09-18 191925](https://github.com/user-attachments/assets/b9714915-9b7d-4919-b275-8f29a6c91037)
-
-
-
-
-
-
-
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731153016669/c81da6d3-ac85-4821-8672-c74d026818c9.png align="center")
