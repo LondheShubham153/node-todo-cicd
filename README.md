@@ -318,6 +318,7 @@ This Jenkins CI/CD pipeline automates the entire process of **building**, **test
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152964053/43a6d692-5a57-44a2-81f1-9e5e86e023cd.png align="center")
 
+
 6 ) Also Checked Contineous Integration is Working or NOT :
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731153016669/c81da6d3-ac85-4821-8672-c74d026818c9.png align="center")
