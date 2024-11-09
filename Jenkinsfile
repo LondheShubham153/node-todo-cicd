@@ -6,15 +6,19 @@ pipeline {
         stage("code"){
             steps{
                 git url: "https://github.com/Amitabh-DevOps/Jenkins-CI-CD-Project-Todo-node-app.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
+                echo 'Bhaiya code clone hogaya'
             }
         }
         stage("build and test"){
             steps{
-                sh "docker rm -f node-todo-app || true"
-                sh "docker build . -t todo-app"
-                sh "docker run --rm -d --name node-todo-app -p 8000:8000 todo-app"
-                echo 'code build bhi ho gaya'
+                sh "docker build -t node-app ."
+                echo 'Code build done'
+            }
+        }
+        stage("deploy"){
+            steps{
+                sh "docker-compose down && docker-compose up -d --build"
+                echo 'Deployment also done'
             }
         }
     }
