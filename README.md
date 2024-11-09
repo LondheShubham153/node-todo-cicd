@@ -285,40 +285,40 @@ This Jenkins CI/CD pipeline automates the entire process of **building**, **test
 
 1 ) Making changes in Github repo :
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152682118/77926fed-70e0-410a-a75c-877b2216f0a7.png align="center")
+![Changes in GitHub Repo](README-images/image1.png)
 
 2 ) Checking the Contineous Integration of code on Jenkins :
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152713449/9546322b-2010-4c7e-bcb1-2b643db80826.png align="center")
+![Contineous Integration](README-images/image2.png)
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152748842/d2891b5a-33e5-4039-89c4-743a38f2f065.png align="center")
+![Contineous Integration](README-images/image3.png)
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152758854/2ebce78b-3a91-456e-ab09-5d6696c51d4a.png align="center")
+![Contineous Integration](README-images/image4.png)
 
 3 ) Changes is Successfully applied to Project using Github push :
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152783819/6fac0c13-5183-412a-9f15-c950444efa7a.png align="center")
+![Changes applied](README-images/image5.png)
 
 4 ) Checking the Output :
 
 * Previous output:
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152837608/f12d902b-663a-48c2-83b3-0dde14d2a38c.png align="center")
+    ![Previous output](README-images/image10.png)
     
 * After updating application code :
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152903530/41c95601-6d01-4192-99c1-2aa91c994b00.png align="center")
+    ![After updating](README-images/image6.png)
     
 
 5 ) Testing the Deployed Project by checking its Features :
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152927888/c8fb9516-d837-4a0c-ac32-928e9962da05.png align="center")
+![Testing](README-images/image7.png)
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152955978/3336ac59-05c0-45ee-aa70-7eaf0029a61b.png align="center")
+![Testing](README-images/image8.png)
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731152964053/43a6d692-5a57-44a2-81f1-9e5e86e023cd.png align="center")
+![Testing](README-images/image9.png)
 
 
 6 ) Also Checked Contineous Integration is Working or NOT :
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1731153016669/c81da6d3-ac85-4821-8672-c74d026818c9.png align="center")
+![Checked Contineous Integration](README-images/image5.png)
