@@ -2,7 +2,6 @@ version: '3.9'
 
 services:
   web:
-    build:
-      context: .
+    image: trainwithshubham/node-app:latest
     ports:
       - "8000:8000"
