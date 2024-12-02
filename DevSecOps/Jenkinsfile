@@ -1,63 +1,90 @@
-
+@Library("Shared_lib@main") _
 pipeline {
     
     agent any
     environment{
         SONAR_HOME = tool "Sonar"
     }
+    
     stages {
+
+        stage("Clean WorkSpace"){
+            steps{
+                echo "Cleaning Jenkins Workspace..."
+                cleanWs()
+            }
+        }
         
-        stage("Code"){
+        stage("Git: Code Checkout"){
             steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git" , branch: "master"
-                echo "Code Cloned Successfully"
-            }
-        }
-        stage("SonarQube Analysis"){
-            steps{
-               withSonarQubeEnv("Sonar"){
-                   sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=nodetodo -Dsonar.projectKey=nodetodo -X"
-               }
-            }
-        }
-        stage("SonarQube Quality Gates"){
-            steps{
-               timeout(time: 1, unit: "MINUTES"){
-                   waitForQualityGate abortPipeline: false
-               }
-            }
-        }
-        stage("OWASP"){
-            steps{
-                dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'OWASP'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
-        stage("Build & Test"){
-            steps{
-                sh 'docker build -t node-app-batch-6:latest .'
-                echo "Code Built Successfully"
-            }
-        }
-        stage("Trivy"){
-            steps{
-                sh "trivy image node-app-batch-6"
-            }
-        }
-        stage("Push to Private Docker Hub Repo"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"DockerHubCreds",passwordVariable:"dockerPass",usernameVariable:"dockerUser")]){
-                sh "docker login -u ${env.dockerUser} -p ${env.dockerPass}"
-                sh "docker tag node-app-batch-6:latest ${env.dockerUser}/node-app-batch-6:latest"
-                sh "docker push ${env.dockerUser}/node-app-batch-6:latest"
+                script{
+                    echo "Onboarding code..."
+                    code_checkout()
                 }
-                
             }
         }
-        stage("Deploy"){
+        stage("SonarQube: Analysis"){
             steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo "App Deployed Successfully"
+               script{
+                   echo "Analyzing Code..."
+                   sonarqube_analysis("Sonar")
+               }
+            }
+        }
+        stage("SonarQube: Quality Gates"){
+            steps{
+               script{
+                   echo "Checking code Quality..."
+                   sonarqube_code_quality()
+               }
+            }
+        }
+        stage("OWASP: Dependency Check"){
+            steps{
+                script{
+                    echo "Checking dependency..."
+                    owasp_dependency()
+                }
+            }
+        }
+        stage("Docker: Build"){
+            steps{
+                script{
+                    echo "Building code..."
+                    docker_build("node-app","v2","madhupdevops")
+                }
+            }
+        }
+        stage("Trivy: filesystem scan"){
+            steps{
+                script{
+                    echo "Scanning file system..."
+                    trivy_scan()
+                }
+            }
+        }
+        stage("Docker: Push to remote dockerhub"){
+            steps{
+                script{
+                    echo "Pushing to DockerHub..."
+                    docker_push("node-app","v2","madhupdevops")
+                }
+            }
+        }
+
+        stage("Docker: Cleaning Artifacts"){
+            steps{
+                script{
+                    echo "Cleaning Artifacts..."
+                    docker_cleanup("node-app","v2","madhupdevops")
+                }
+            }
+        }
+        stage("Docker-Compose: Deploy code"){
+            steps{
+                script{
+                    docker_compose()
+                }
             }
         }
     }
