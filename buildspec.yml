@@ -1,0 +1,49 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_REGISTRY_USERNAME: /myapp/docker-credentials/username
+    DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
+    DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - echo Installing Node.js and npm...
+      - curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o /usr/local/bin/n
+      - chmod +x /usr/local/bin/n
+      - n 12
+      - npm config set registry https://registry.npmjs.org/
+      - curl -L https://www.npmjs.com/install.sh | sudo bash
+      
+  pre_build:
+    commands:
+      - echo Logging in to Docker Registry...
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - IMAGE_REPO_NAME="node-todo-app"
+      - IMAGE_NAME="$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/$IMAGE_REPO_NAME"
+      - IMAGE_TAG=v1
+      
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_NAME:latest .
+      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
+      
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_NAME:latest
+      - docker push $IMAGE_NAME:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '{"ImageURI":"%s"}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
+      - cat imageDefinitions.json
+      
+artifacts:
+  files:
+    - '**/*'
+    
