@@ -11,12 +11,7 @@ phases:
     runtime-versions:
       nodejs: 12
     commands:
-      - echo Installing Node.js and npm...
-      - curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o /usr/local/bin/n
-      - chmod +x /usr/local/bin/n
-      - n 12
-      - npm config set registry https://registry.npmjs.org/
-      - curl -L https://www.npmjs.com/install.sh | sudo bash
+      - npm install
       
   pre_build:
     commands:
