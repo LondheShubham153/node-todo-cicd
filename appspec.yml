@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/aws-todo-app
+    destination: /home/ubuntu/aws-node-todo-app
 # permissions:
 #   - object: /home/ubuntu/aws-todo-app/scripts
 #     pattern: "*.sh"
