@@ -42,12 +42,14 @@ phases:
 
 artifacts:
   files:
-  files:
-artifacts:
-  files:
     - '**/*'
-  exclude-paths:
-    - node_modules/**/*
+  base-directory: '.'
+  exclude-patterns:
+    - 'node_modules/**/*'
+    - '.git/**/*'
+    - '.gitignore'
+    - 'README.md'
+    - 'package-lock.json'
 
     
     # - imageDefinitions.json
