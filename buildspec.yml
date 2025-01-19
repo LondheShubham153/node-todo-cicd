@@ -42,6 +42,8 @@ phases:
 
 artifacts:
   files:
+  files:
     - imageDefinitions.json
     - appspec.yml
     - taskdef.json
+    - scripts/**/*
