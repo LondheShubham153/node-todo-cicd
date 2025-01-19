@@ -39,7 +39,7 @@ phases:
       - echo Writing image definitions file...
       - printf '{"ImageURI":"%s", "Port": 8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
-      
+
 artifacts:
   files:
     - imageDefinitions.json
