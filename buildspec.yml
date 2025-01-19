@@ -45,21 +45,11 @@ artifacts:
   files:
 artifacts:
   files:
-    - imageDefinitions.json
-    - appspec.yml
-    - taskdef.json
-    - scripts/**/*
-    - package.json
-    - index.js
-    - Dockerfile
+    - '**/*'
   exclude-paths:
     - node_modules/**/*
-    - .git/**/*
-    - .gitignore
-    - README.md
-    - package-lock.json
-  base-directory: '.'
-  discard-paths: no
+
+    
     # - imageDefinitions.json
     # - appspec.yml
     # - taskdef.json
