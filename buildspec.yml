@@ -9,9 +9,11 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: 12.2.0
     commands:
-      - npm install
+      - echo Installing Node.js and npm...
+      - n 12.2.0
+      - npm config set registry https://registry.npmjs.org/
       
   pre_build:
     commands:
@@ -35,10 +37,11 @@ phases:
       - docker push $IMAGE_NAME:latest
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '{"ImageURI":"%s"}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
+      - printf '{"ImageURI":"%s", "Port": 8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
       
 artifacts:
   files:
-    - '**/*'
-    
+    - imageDefinitions.json
+    - appspec.yml
+    - taskdef.json
