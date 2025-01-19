@@ -37,7 +37,7 @@ phases:
       - docker push $IMAGE_NAME:latest
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '{"ImageURI":"%s", "Port": 8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
+      - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
 
 artifacts:
