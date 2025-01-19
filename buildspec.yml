@@ -39,7 +39,7 @@ phases:
       - docker push $IMAGE_NAME:latest
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - echo Uploading zip file to S3...
-      - aws s3 cp node-todo-app.zip s3://aws-node-todo-app-cicd/node-todo-app/
+      - aws s3 cp node-todo-app.zip s3://aws-node-todo-app-cicd/
       - echo Writing image definitions file...
       - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
