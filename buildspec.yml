@@ -26,10 +26,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Checking if application directory exists...
-      - if [ ! -d "node-todo-app" ]; then echo "Error! node-todo-app directory not found!"; exit 1; fi
-      - echo Creating zip file of the application...
-      - zip -r node-todo-app.zip node-todo-app # Zipping the node-todo-app directory directly
+      - echo Packaging application into a zip file...
+      - zip -r node-todo-app.zip * .[^.]* # Include all files and directories, including hidden files
       - echo Building the Docker image...
       - docker build -t $IMAGE_NAME:latest .
       - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
@@ -41,7 +39,7 @@ phases:
       - docker push $IMAGE_NAME:latest
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - echo Uploading zip file to S3 root location...
-      - aws s3 cp node-todo-app.zip s3://aws-node-todo-app-cicd/ # Upload zip file to the root of the bucket
+      - aws s3 cp node-todo-app.zip s3://aws-node-todo-app-cicd/node-todo-app/ # Upload zip file to the root of the bucket
       - echo Writing image definitions file...
       - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
