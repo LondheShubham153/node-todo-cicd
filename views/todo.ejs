@@ -1,113 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Jenkins practice for devops - 2004</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: white;
-                color: #333;
-                margin: 0;
-                padding: 0;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenkins Practice for DevOps - 2004</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        /* Todo List Styling */
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        ul li {
+            background: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            padding: 15px;
+            position: relative;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        ul li:hover {
+            transform: scale(1.02);
+        }
+
+        /* Links Styling */
+        ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
+        ul li a:hover {
+            opacity: 0.7;
+        }
+
+        /* Delete Button */
+        .delete-btn {
+            color: red;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        /* Edit Button */
+        .edit-btn {
+            color: #FFC107;
+            position: absolute;
+            right: 40px;
+            top: 10px;
+        }
+
+        /* Form Styling */
+        form {
+            background: #fff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
             h1 {
-                background-color: #4CAF50;
-                color: white;
-                margin: 0;
-                padding: 20px;
-                text-align: center;
-            }
-
-            ul {
-                list-style: none;
-                padding: 0;
-            }
-
-            ul li {
-                background: #fff;
-                border: 1px solid #ddd;
-                margin-bottom: 10px;
-                padding: 10px;
-                position: relative;
-            }
-
-            ul li a {
-                color: #333;
-                text-decoration: none;
-                font-weight: bold;
-            }
-
-            ul li a:hover {
-                color: #4CAF50;
-            }
-
-            .delete-btn {
-                color: red;
-                position: absolute;
-                right: 10px;
-                top: 10px;
-            }
-
-            .edit-btn {
-                color: #FFC107;
-                position: absolute;
-                right: 40px;
-                top: 10px;
+                font-size: 1.5em;
             }
 
             form {
-                background: #fff;
-                padding: 20px;
-                margin-top: 20px;
+                padding: 15px;
             }
 
-            label {
-                display: block;
-                margin-bottom: 10px;
+            ul li {
+                padding: 12px;
             }
 
-            input[type="text"] {
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 10px;
-                border: 1px solid #ddd;
+            input[type="text"], input[type="submit"] {
+                font-size: 14px;
             }
+        }
+    </style>
+</head>
 
-            input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                cursor: pointer;
-            }
+<body>
+    <h1>Todo List - Practice CI/CD - Amitabh DevOps 2004</h1>
+    <h1>Welcome to DevOps Batch - 08</h1>
+    <h1>Welcome to the TrainWithShubham Community</h1>
 
-            input[type="submit"]:hover {
-                background-color: #45a049;
-            }
-        </style>
-    </head>
+    <ul>
+        <% todolist.forEach(function(todo, index) { %>
+        <li>
+            <a href="/todo/delete/<%= index %>" class="delete-btn">✘</a>
+            <a href="/todo/<%= index %>" class="edit-btn">✎</a>
+            <%- todo %>
+        </li>
+        <% }); %>
+    </ul>
 
-    <body>
-        <h1>Todo List - Practice CI/CD - Amitabh-DevOps-2004</h1>
-        <h1>Welcome to DevOps Batch - 08</h1>
-        <h1>Welcome to the TrainWithShubham Community</h1>
-        <ul>
-            <% todolist.forEach(function(todo, index) { %>
-            <li>
-                <a href="/todo/delete/<%= index %>" class="delete-btn">✘</a>
-                <a href="/todo/<%= index %>" class="edit-btn">✎</a>
-                <%- todo %>
-            </li>
-            <% }); %>
-        </ul>
-
-        <form action="/todo/add/" method="post">
-            <p>
-                <label for="newtodo">What should I do?</label>
-                <input type="text" name="newtodo" id="newtodo" autofocus />
-                <input type="submit" value="Add" />
-            </p>
-        </form>
-    </body>
+    <form action="/todo/add/" method="post">
+        <label for="newtodo">What should I do?</label>
+        <input type="text" name="newtodo" id="newtodo" placeholder="Enter your task..." autofocus required />
+        <input type="submit" value="Add" />
+    </form>
+</body>
 </html>
