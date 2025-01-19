@@ -1,12 +1,22 @@
 version: 0.0
 os: linux
-
+files:
+  - source: /
+    destination: /home/ubuntu/aws-todo-app
+# permissions:
+#   - object: /home/ubuntu/aws-todo-app/scripts
+#     pattern: "*.sh"
+#     owner: ubuntu
+#     group: ubuntu
+#     mode: 755
+#     type:
+#       - file
 hooks:
   ApplicationStop:
     - location: scripts/stop_container.sh
       timeout: 300
       runas: root
-  AfterInstall:
+  ApplicationStart:
     - location: scripts/start_container.sh
       timeout: 300
       runas: root
