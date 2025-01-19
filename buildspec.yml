@@ -26,6 +26,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - echo Packaging application into a zip file...
+      - zip -r node-todo-app.zip * .[^.]* # Include hidden files like .gitignore
       - echo Building the Docker image...
       - docker build -t $IMAGE_NAME:latest .
       - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
@@ -36,6 +38,8 @@ phases:
       - echo Pushing the Docker image...
       - docker push $IMAGE_NAME:latest
       - docker push $IMAGE_NAME:$IMAGE_TAG
+      - echo Uploading zip file to S3...
+      - aws s3 cp node-todo-app.zip s3://aws-node-todo-app-cicd/node-todo-app/
       - echo Writing image definitions file...
       - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
