@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/node-todo-app
+    overwrite: true
 # permissions:
 #   - object: /home/ubuntu/aws-todo-app/scripts
 #     pattern: "*.sh"
