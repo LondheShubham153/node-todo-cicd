@@ -26,10 +26,10 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - echo Checking if application directory exists...
+      - if [ ! -d "node-todo-app" ]; then echo "Error! node-todo-app directory not found!"; exit 1; fi
       - echo Creating zip file of the application...
-      - cd node-todo-app # Navigate to the application directory
-      - zip -r ../node-todo-app.zip * .[^.]* # Create zip file outside the application directory
-      - cd .. # Return to the root directory
+      - zip -r node-todo-app.zip node-todo-app # Zipping the node-todo-app directory directly
       - echo Building the Docker image...
       - docker build -t $IMAGE_NAME:latest .
       - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
