@@ -4,6 +4,7 @@ files:
   - source: /
     destination: /home/ubuntu/node-todo-app
     overwrite: true
+file_exists_behavior: OVERWRITE
 # permissions:
 #   - object: /home/ubuntu/aws-todo-app/scripts
 #     pattern: "*.sh"
