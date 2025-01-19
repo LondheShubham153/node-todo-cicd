@@ -1,88 +1,93 @@
-const express = require('express'),
-    bodyParser = require('body-parser'),
-    // In order to use PUT HTTP verb to edit item
-    methodOverride = require('method-override'),
-    // Mitigate XSS using sanitizer
-    sanitizer = require('sanitizer'),
-    app = express(),
-    port = 8000
+const express = require('express');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const sanitizer = require('sanitizer');
 
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
-// https: //github.com/expressjs/method-override#custom-logic
-app.use(methodOverride(function (req, res) {
-    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-        // look in urlencoded POST bodies and delete it
-        let method = req.body._method;
-        delete req.body._method;
-        return method
-    }
-}));
+const app = express();
+const port = 8000;
 
+// Middleware Setup
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride(handleMethodOverride));
 
+// To-do List Storage
 let todolist = [];
 
-/* The to do list and the form are displayed */
-app.get('/todo', function (req, res) {
-        res.render('todo.ejs', {
-            todolist,
-            clickHandler: "func1();"
-        });
-    })
+// Routes
 
-    /* Adding an item to the to do list */
-    .post('/todo/add/', function (req, res) {
-        // Escapes HTML special characters in attribute values as HTML entities
-        let newTodo = sanitizer.escape(req.body.newtodo);
-        if (req.body.newtodo != '') {
-            todolist.push(newTodo);
-        }
-        res.redirect('/todo');
-    })
+// Display To-Do List
+app.get('/todo', (req, res) => {
+  res.render('todo.ejs', {
+    todolist,
+    clickHandler: "func1();"
+  });
+});
 
-    /* Deletes an item from the to do list */
-    .get('/todo/delete/:id', function (req, res) {
-        if (req.params.id != '') {
-            todolist.splice(req.params.id, 1);
-        }
-        res.redirect('/todo');
-    })
+// Add Item to To-Do List
+app.post('/todo/add/', (req, res) => {
+  const newTodo = sanitizer.escape(req.body.newtodo);
+  if (newTodo) {
+    todolist.push(newTodo);
+  }
+  res.redirect('/todo');
+});
 
-    // Get a single todo item and render edit page
-    .get('/todo/:id', function (req, res) {
-        let todoIdx = req.params.id;
-        let todo = todolist[todoIdx];
+// Delete Item from To-Do List
+app.get('/todo/delete/:id', (req, res) => {
+  const { id } = req.params;
+  if (id !== '') {
+    todolist.splice(id, 1);
+  }
+  res.redirect('/todo');
+});
 
-        if (todo) {
-            res.render('edititem.ejs', {
-                todoIdx,
-                todo,
-                clickHandler: "func1();"
-            });
-        } else {
-            res.redirect('/todo');
-        }
-    })
+// Edit Item: Get Specific Todo
+app.get('/todo/:id', (req, res) => {
+  const { id } = req.params;
+  const todo = todolist[id];
 
-    // Edit item in the todo list 
-    .put('/todo/edit/:id', function (req, res) {
-        let todoIdx = req.params.id;
-        // Escapes HTML special characters in attribute values as HTML entities
-        let editTodo = sanitizer.escape(req.body.editTodo);
-        if (todoIdx != '' && editTodo != '') {
-            todolist[todoIdx] = editTodo;
-        }
-        res.redirect('/todo');
-    })
-    /* Redirects to the to do list if the page requested is not found */
-    .use(function (req, res, next) {
-        res.redirect('/todo');
-    })
-
-    .listen(port, function () {
-        // Logging to console
-        console.log(`Todolist running on http://0.0.0.0:${port}`)
+  if (todo) {
+    res.render('edititem.ejs', {
+      todoIdx: id,
+      todo,
+      clickHandler: "func1();"
     });
-// Export app
+  } else {
+    res.redirect('/todo');
+  }
+});
+
+// Edit Item: Save Changes
+app.put('/todo/edit/:id', (req, res) => {
+  const { id } = req.params;
+  const editedTodo = sanitizer.escape(req.body.editTodo);
+
+  if (id && editedTodo) {
+    todolist[id] = editedTodo;
+  }
+  res.redirect('/todo');
+});
+
+// Redirect Undefined Routes to To-Do List
+app.use((req, res) => {
+  res.redirect('/todo');
+});
+
+// Start Server
+app.listen(port, () => {
+  console.log(`Todolist running on http://0.0.0.0:${port}`);
+});
+
+// Export app for testing
 module.exports = app;
+
+// Helper Functions
+
+// Handle Method Override
+function handleMethodOverride(req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    const method = req.body._method;
+    delete req.body._method;
+    return method;
+  }
+}
