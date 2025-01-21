@@ -1,0 +1,57 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_REGISTRY_USERNAME: /myapp/docker-credentials/username
+    DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
+    DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12.2.0
+    commands:
+      - echo Installing Node.js and npm...
+      - n 12.2.0
+      - npm config set registry https://registry.npmjs.org/
+
+  pre_build:
+    commands:
+      - echo Logging in to Docker Registry...
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - IMAGE_REPO_NAME="tws-aws-cicd-demo"
+      - IMAGE_NAME="$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/$IMAGE_REPO_NAME"
+      - IMAGE_TAG=v1
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Packaging application into a zip file...
+      - zip -r node-todo-app.zip * .[^.]* # Include all files and directories, including hidden files
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_NAME:latest .
+      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_NAME:latest
+      - docker push $IMAGE_NAME:$IMAGE_TAG
+      - echo Uploading zip file to S3 root location...
+      - aws s3 cp node-todo-app.zip s3://tws-aws-cicd-demo/node-todo-app/ # Upload zip file to the root of the bucket
+      - echo Writing image definitions file...
+      - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:$IMAGE_TAG > imageDefinitions.json
+      - cat imageDefinitions.json
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: '.'
+  discard-paths: no
+  exclude-patterns:
+    - 'node_modules/**/*'
+    - '.git/**/*'
+    - '.gitignore'
+    - 'README.md'
+    - 'package-lock.json'
