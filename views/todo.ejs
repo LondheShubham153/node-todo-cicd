@@ -4,148 +4,262 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #333;
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #22c55e;
+            --background: #f8fafc;
+            --text: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: var(--text);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            padding: 2rem 1rem;
         }
 
         h1 {
-            background: linear-gradient(to right, #ff512f, #dd2476);
-            color: white;
-            padding: 20px;
-            margin: 0;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .todo-container {
-            width: 90%;
-            max-width: 600px;
-            margin-top: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            width: 100%;
+            max-width: 640px;
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(12px);
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        ul li {
-            background: linear-gradient(to right, #fdfbfb, #ebedee);
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            padding: 15px;
+        .todo-list {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.3s;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
         }
 
-        ul li:hover {
-            background: linear-gradient(to right, #e3ffe7, #d9e7ff);
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .todo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .todo-text {
             flex: 1;
-            margin: 0;
-            font-size: 16px;
-            color: #333;
+            font-size: 1rem;
+            margin: 0 1rem;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .todo-text::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
         }
 
         .actions {
             display: flex;
-            gap: 15px;
+            gap: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .todo-item:hover .actions {
+            opacity: 1;
         }
 
         .btn {
             cursor: pointer;
             border: none;
             background: none;
-            font-size: 18px;
-            transition: transform 0.2s;
-        }
-
-        .btn:hover {
-            transform: scale(1.2);
-        }
-
-        .btn.delete {
-            color: #ff6b6b;
-        }
-
-        .btn.edit {
-            color: #ffd93d;
-        }
-
-        form {
-            margin-top: 20px;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
         }
 
-        label {
-            font-weight: 500;
+        .btn--icon {
+            width: 36px;
+            height: 36px;
         }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        input[type="submit"] {
-            background: linear-gradient(to right, #43e97b, #38f9d7);
+        .btn--primary {
+            background: var(--primary);
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
         }
 
-        input[type="submit"]:hover {
-            background: linear-gradient(to right, #30cfd0, #330867);
+        .btn--primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn--danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn--danger:hover {
+            background: var(--danger-hover);
+        }
+
+        .btn--success {
+            background: var(--success);
+            color: white;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-label {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            pointer-events: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label {
+            top: 0;
+            font-size: 0.875rem;
+            background: var(--card-bg);
+            padding: 0 0.25rem;
+            color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem;
+                padding: 1rem;
+            }
+            
+            .todo-container {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>🎯 2025 Goals Todo List</h1>
+    <h1>🎯 2025 Goals</h1>
     <div class="todo-container">
-        <ul>
+        <ul class="todo-list">
             <% todolist.forEach(function(todo, index) { %>
-                <li>
+                <li class="todo-item">
                     <span class="todo-text"><%- todo %></span>
                     <div class="actions">
-                        <button class="btn edit" onclick="window.location.href='/todo/<%= index %>'">✎</button>
-                        <button class="btn delete" onclick="window.location.href='/todo/delete/<%= index %>'">✘</button>
+                        <button class="btn btn--icon btn--success" onclick="window.location.href='/todo/<%= index %>'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        </button>
+                        <button class="btn btn--icon btn--danger" onclick="window.location.href='/todo/delete/<%= index %>'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>
+                        </button>
                     </div>
                 </li>
             <% }); %>
         </ul>
 
         <form action="/todo/add/" method="post">
-            <label for="newtodo">Add a new task:</label>
-            <input type="text" name="newtodo" id="newtodo" placeholder="What do you want to achieve?" required autofocus />
-            <input type="submit" value="Add Task" />
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    name="newtodo" 
+                    id="newtodo" 
+                    class="form-input" 
+                    placeholder=" "
+                    required 
+                    autofocus 
+                />
+                <label class="form-label" for="newtodo">Add new goal</label>
+            </div>
+            <button type="submit" class="submit-btn">
+                Add Goal ➕
+            </button>
         </form>
     </div>
 </body>
