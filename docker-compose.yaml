@@ -4,4 +4,4 @@ services:
   web:
     image: trainwithshubham/node-app:latest
     ports:
-      - "8000:8000"
+      - "8001:8000"
