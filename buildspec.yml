@@ -2,33 +2,26 @@ version: 0.2
 
 env:
   parameter-store:
-    DOCKER_USERNAME: /myapp/docker-credentials/username
-    DOCKER_PASSWORD: /myapp/docker-credentials/password
+    DOCKER_REGISTRY_USERNAME: "/myapp/docker-credentials/username"
+    DOCKER_REGISTRY_PASSWORD: "/myapp/docker-credentials/password"
+    DOCKER_REGISTRY_URL: "/myapp/docker-registry/url"
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 12
-    commands:
-      - echo Installing dependencies...
-      - npm install
-
   pre_build:
     commands:
-      - echo Logging in to Docker Hub...
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - IMAGE_NAME="maverick334/test-node-app"
-
+      - echo Logging in to Docker Registry...
+      - export IMAGE_REPO_NAME="maverick334/test-node-app"
+      - export IMAGE_NAME="$DOCKER_REGISTRY_URL/$IMAGE_REPO_NAME"
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      
   build:
     commands:
-      - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $IMAGE_NAME:latest .
 
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker image to Docker Hub...
+      - echo Pushing the Docker image...
       - docker push $IMAGE_NAME:latest
       - echo Uploading application zip file to S3...
       - zip -r node-todo-app.zip * .[^.]*
