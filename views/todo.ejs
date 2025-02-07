@@ -1,111 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Todo List APP test</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                color: #333;
-                margin: 0;
-                padding: 0;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bright Goals 🌟</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-hover: #7C3AED;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --background: #f8fafc;
+            --text: #1F2937;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --gradient-start: #F0FDF4;
+            --gradient-end: #E0F2FE;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        .motivational-text {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 2.5rem;
+            background: var(--card-bg);
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px -6px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .todo-container {
+            width: 100%;
+            max-width: 720px;
+            background: var(--card-bg);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem 2rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: gentleAppear 0.4s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes gentleAppear {
+            0% { transform: translateY(8px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .todo-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.08);
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 1.1rem;
+            margin: 0 1.5rem;
+            position: relative;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+        }
+
+        .todo-item:hover .actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .btn {
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 80%);
+        }
+
+        .btn:active::after {
+            opacity: 1;
+        }
+
+        .btn--icon {
+            width: 42px;
+            height: 42px;
+        }
+
+        .btn--primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: white;
+        }
+
+        .btn--accent {
+            background: linear-gradient(135deg, var(--accent) 0%, #F97316 100%);
+            color: white;
+        }
+
+        .btn--success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 1rem;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: var(--card-bg);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .form-label {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B7280;
+            pointer-events: none;
+            transition: all 0.3s;
+            background: linear-gradient(0deg, var(--card-bg) 50%, transparent 50%);
+            padding: 0 0.5rem;
+        }
+
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label {
+            top: 0;
+            font-size: 0.9rem;
+            color: var(--primary);
+            transform: translateY(-50%);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            border: none;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(139, 92, 246, 0.2);
+        }
+
+        @media (max-width: 768px) {
             h1 {
-                background-color: #4CAF50;
-                color: white;
-                margin: 0;
-                padding: 20px;
-                text-align: center;
+                font-size: 2.25rem;
+                padding: 1.25rem 2rem;
             }
-
-            ul {
-                list-style: none;
-                padding: 0;
+            
+            .todo-container {
+                padding: 2rem;
             }
-
-            ul li {
-                background: #fff;
-                border: 1px solid #ddd;
-                margin-bottom: 10px;
-                padding: 10px;
-                position: relative;
+            
+            .todo-item {
+                padding: 1rem 1.5rem;
             }
+        }
 
-            ul li a {
-                color: #333;
-                text-decoration: none;
-                font-weight: bold;
-            }
+        .sparkle {
+            width: 24px;
+            height: 24px;
+            animation: pulse 2s infinite;
+        }
 
-            ul li a:hover {
-                color: #4CAF50;
-            }
-
-            .delete-btn {
-                color: red;
-                position: absolute;
-                right: 10px;
-                top: 10px;
-            }
-
-            .edit-btn {
-                color: #FFC107;
-                position: absolute;
-                right: 40px;
-                top: 10px;
-            }
-
-            form {
-                background: #fff;
-                padding: 20px;
-                margin-top: 20px;
-            }
-
-            label {
-                display: block;
-                margin-bottom: 10px;
-            }
-
-            input[type="text"] {
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 10px;
-                border: 1px solid #ddd;
-            }
-
-            input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                cursor: pointer;
-            }
-
-            input[type="submit"]:hover {
-                background-color: #45a049;
-            }
-        </style>
-    </head>
-
-    <body>
-        <h1>Hello Junoon Batch 8 (Jenkins), Write your plan on Learning Jenkins</h1>
-        <ul>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <p class="motivational-text">Every small step brings you closer to your dreams ✨</p>
+    <h1>
+        <svg class="sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+        </svg>
+        My 2025 Journey
+    </h1>
+    <div class="todo-container">
+        <ul class="todo-list">
             <% todolist.forEach(function(todo, index) { %>
-            <li>
-                <a href="/todo/delete/<%= index %>" class="delete-btn">✘</a>
-                <a href="/todo/<%= index %>" class="edit-btn">✎</a>
-                <%- todo %>
-            </li>
+                <li class="todo-item">
+                    <span class="todo-text"><%- todo %></span>
+                    <div class="actions">
+                        <button class="btn btn--icon btn--success" onclick="window.location.href='/todo/<%= index %>'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn--icon btn--accent" onclick="window.location.href='/todo/delete/<%= index %>'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </li>
             <% }); %>
         </ul>
 
         <form action="/todo/add/" method="post">
-            <p>
-                <label for="newtodo">What should I do?</label>
-                <input type="text" name="newtodo" id="newtodo" autofocus />
-                <input type="submit" value="Add" />
-            </p>
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    name="newtodo" 
+                    id="newtodo" 
+                    class="form-input" 
+                    placeholder=" "
+                    required 
+                    autofocus 
+                />
+                <label class="form-label" for="newtodo">Add new milestone</label>
+            </div>
+            <button type="submit" class="submit-btn">
+                Add New Goal 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+            </button>
         </form>
-    </body>
+    </div>
+</body>
 </html>

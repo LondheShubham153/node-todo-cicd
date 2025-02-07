@@ -1,0 +1,42 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_REGISTRY_USERNAME: "/myapp/docker-credentials/username"
+    DOCKER_REGISTRY_PASSWORD: "/myapp/docker-credentials/password"
+    DOCKER_REGISTRY_URL: "/myapp/docker-registry/url"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Docker Registry...
+      - export IMAGE_REPO_NAME="maverick334/test-node-app"
+      - export IMAGE_NAME="$DOCKER_REGISTRY_URL/$IMAGE_REPO_NAME"
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_NAME:latest .
+
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_NAME:latest
+      - echo Uploading application zip file to S3...
+      - zip -r node-todo-app.zip * .[^.]*
+      - aws s3 cp node-todo-app.zip s3://tws-aws-cicd-demo/node-todo-app/ --region us-east-1
+      - echo Writing image definitions file...
+      - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:latest > imageDefinitions.json
+      - cat imageDefinitions.json
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
+  exclude-patterns:
+    - 'node_modules/**/*'
+    - '.git/**/*'
+    - '.gitignore'
+    - 'README.md'
+    - 'package-lock.json'
