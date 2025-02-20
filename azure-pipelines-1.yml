@@ -1,30 +1,31 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
   name: Default  
   demands:
-  - agent.name -equals test-vm
+  - agent.name -equals test-vm  
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: echo "Starting Pipeline..."
+  displayName: 'Start Pipeline'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-- task: DockerInstaller@0
-  inputs:
-    dockerVersion: '17.09.0-ce'
-
+# Docker Build Step
 - task: Docker@2
+  displayName: 'Build and tag Docker image'
   inputs:
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
+    command: build
+    Dockerfile: './Dockerfile'  
+    tags: 'latest'
+    repository: node-app
 
+# Stop & Remove Old Container (if exists)
+- script: |
+    docker stop node-app-container || true
+    docker rm node-app-container || true
+  displayName: 'Stop and Remove Old Container'
+
+# Run New Container
+- script: |
+    docker run -d --name node-app-container -p 8080:8080 node-app:latest
+  displayName: 'Run New Docker Container'
