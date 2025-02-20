@@ -27,5 +27,5 @@ steps:
 
 # Run New Container
 - script: |
-    docker run -d --name node-app-container -p 8080:8080 node-app:latest
+    docker run -d --name node-app-container -p 8000:8000 node-app:latest
   displayName: 'Run New Docker Container'
