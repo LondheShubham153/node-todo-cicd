@@ -1,34 +1,35 @@
-pipeline{
-    agent { label 'dev-server' }
+pipeline {
+    agent { label 'node-agent' }
     
     stages{
-        stage("Code Clone"){
+        stage('Code'){
             steps{
-                echo "Code Clone Stage"
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
+                git url: 'https://github.com/MR-AMAN123/node-todo-cicd.git', branch: 'master'
             }
         }
-        stage("Code Build & Test"){
+        stage('Build'){
             steps{
-                echo "Code Build Stage"
-                sh "docker build -t node-app ."
+                echo "building code"
+                sh 'docker build . -t mohdaman123/node-todo-test:latest'
             }
         }
-        stage("Push To DockerHub"){
+        stage('Push'){
             steps{
-                withCredentials([usernamePassword(
-                    credentialsId:"dockerHubCreds",
-                    usernameVariable:"dockerHubUser", 
-                    passwordVariable:"dockerHubPass")]){
-                sh 'echo $dockerHubPass | docker login -u $dockerHubUser --password-stdin'
-                sh "docker image tag node-app:latest ${env.dockerHubUser}/node-app:latest"
-                sh "docker push ${env.dockerHubUser}/node-app:latest"
-                }
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                sh 'docker push mohdaman123/node-todo-test:latest'
             }
         }
-        stage("Deploy"){
+        }
+        stage('test'){
             steps{
-                sh "docker compose down && docker compose up -d --build"
+                echo "testing code"
+            }
+        }
+        stage('deploy'){
+            steps{
+                echo "deploying code"
+                sh "docker-compose down && docker-compose up -d"
             }
         }
     }
