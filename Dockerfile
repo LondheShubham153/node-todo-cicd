@@ -1,16 +1,23 @@
-# Node Base Image
-FROM node:12.2.0-alpine
+# Use a more recent Node version (Node 12 is outdated)
+FROM node:18-alpine
 
-#Working Directry
-WORKDIR /node
+# Set working directory
+WORKDIR /app
 
-#Copy the Code
+# Copy only package files first (better caching)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the code
 COPY . .
 
-#Install the dependecies
-RUN npm install
-RUN npm run test
+# Run tests (optional – remove if not needed in build)
+RUN npm test
+
+# Expose the app port
 EXPOSE 8000
 
-#Run the code
-CMD ["node","app.js"]
+# Start the app
+CMD ["node", "app.js"]
