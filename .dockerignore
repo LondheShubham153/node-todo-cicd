@@ -1,0 +1,37 @@
+# Git
+.git
+
+# Node dependencies
+node_modules
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# Environment secrets
+.env
+
+# CI/CD pipelines (not needed in runtime image)
+azure-pipelines
+Jenkinsfile
+
+# DevOps / Infra code (not needed in app container)
+terraform
+k8s
+kustomize
+DevSecOps
+
+# Testing (optional - usually not needed in production image)
+test.js
+tests
+
+# Sonar / code quality tools
+sonar-project.properties
+sonar-project
+
+# Docker files (not needed inside image)
+docker-compose.yml
+Dockerfile
+
+# OS / system junk
+.DS_Store
